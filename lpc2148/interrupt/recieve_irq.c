@@ -1,4 +1,4 @@
-//program to recieve charecter with interrupt
+//program to recieve charecter with vectored interrupt
 #include <LPC214X.H>
 void recieve()__irq
 {
