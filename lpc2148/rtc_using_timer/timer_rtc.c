@@ -77,17 +77,7 @@ void main()
 	U0LCR=0X03;
 
 
-	transmit("Enter the time in hour\n");
-	while(!(U0LSR&(0X01)));
-	hr=U0RBR;
-	transmit("Enter the time in minute\n");
-	while(!(U0LSR&(0X01)));
-	min=U0RBR;
-	transmit("Enter the time in second\n");
-	while(!(U0LSR&(0X01)));
-	sec=U0RBR;
-	sprintf(a,"%d %d %d\n\r",hr,min,sec);
-	transmit(a);
+	
 	rtc_init();
 	while(1)
 	{
