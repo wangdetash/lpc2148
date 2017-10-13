@@ -2,9 +2,9 @@
 #include <LPC214X.H>
 #include <stdio.h>
 
-int sec=00,min=00,hr=00;
-char a[20];
 
+char a[20];
+char hr=0,min=0,sec=0;
 
 
 void rtc()
@@ -16,14 +16,14 @@ void rtc()
  	}
  	else if(min<59)
  		{
- 			sec=00;
+ 			sec=0;
  			min=min+1;
  			
  		}
  	else if(hr<23)
  		{
- 			sec=00;
- 			min=00;
+ 			sec=0;
+ 			min=0;
  			hr=hr+1;
  		}
 }
@@ -64,24 +64,12 @@ while(!(U0LSR&0X20));
 }																														  
 
 
-void recieve(char *q)
-{
-int i;
-for(i=0;;i++)
-{
-while(!(U0LSR&(0X01)));
-q[i]=U0RBR;
-if(q[i]=='\r')
-{
-q[i]='\0';
-break;
-}
-}
-}
+
 
 void main()
 {
 	
+
 	PINSEL0 =0X00008005;
 	IODIR0=0X00000001;
 	U0LCR=0X83;
@@ -89,7 +77,7 @@ void main()
 	U0LCR=0X03;
 
 
-	/*transmit("Enter the time in hour\n");
+	transmit("Enter the time in hour\n");
 	while(!(U0LSR&(0X01)));
 	hr=U0RBR;
 	transmit("Enter the time in minute\n");
@@ -98,8 +86,8 @@ void main()
 	transmit("Enter the time in second\n");
 	while(!(U0LSR&(0X01)));
 	sec=U0RBR;
-	*/
-
+	sprintf(a,"%d %d %d\n\r",hr,min,sec);
+	transmit(a);
 	rtc_init();
 	while(1)
 	{
