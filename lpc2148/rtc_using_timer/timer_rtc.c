@@ -1,10 +1,10 @@
 //program to implement realtime clock using internal timer
 #include <LPC214X.H>
 #include <stdio.h>
-
+#include <stdlib.h>
 
 char a[20];
-char hr=0,min=0,sec=0;
+int hr=0,min=0,sec=0;
 
 
 void rtc()
@@ -41,7 +41,7 @@ void timer()__irq
 void rtc_init()
 {
 	T0CTCR=0X00;
-	T0PR=12000;    
+	T0PR=1200000;    
 	T0TCR=0X02;
 	T0MCR=3;
 	T0MR0=1;
@@ -63,7 +63,20 @@ while(!(U0LSR&0X20));
 }
 }																														  
 
-
+void recieve(char *q)
+{
+	int i;
+ 	for(i=0;;i++)
+ 	{
+		while(!(U0LSR&(0X01)));
+ 		q[i]=U0RBR;
+ 		if(q[i]=='\r')
+ 		{
+ 			q[i]='\0';
+ 			break;
+ 		}
+ 	}
+}
 
 
 void main()
@@ -76,7 +89,15 @@ void main()
 	U0DLL=97;
 	U0LCR=0X03;
 
-
+	transmit("Enter the time in HH:MM:SS\n");
+	recieve(a);
+	hr=atoi(a);
+	
+	recieve(a);
+	min=atoi(a);
+	
+	recieve(a);
+	sec=atoi(a);
 	
 	rtc_init();
 	while(1)
